@@ -864,6 +864,10 @@ int git_date_offset_parse(git_time_t *out, int *out_offset, const char *date)
 	git_time_t timestamp;
 	int offset, error_ret=0;
 
+	GIT_ASSERT_ARG(out);
+	GIT_ASSERT_ARG(out_offset);
+	GIT_ASSERT_ARG(date);
+
 	if (!parse_date_basic(date, &timestamp, &offset)) {
 		*out = timestamp;
 		*out_offset = offset;

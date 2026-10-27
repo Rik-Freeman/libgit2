@@ -24,6 +24,9 @@ char git_str__oom[1];
 
 int git_str_init(git_str *buf, size_t initial_size)
 {
+	if (!buf)
+		return -1;
+
 	buf->asize = 0;
 	buf->size = 0;
 	buf->ptr = git_str__initstr;
@@ -134,6 +137,9 @@ void git_str_dispose(git_str *buf)
 
 void git_str_clear(git_str *buf)
 {
+	if (!buf)
+		return;
+
 	buf->size = 0;
 
 	if (!buf->ptr) {
@@ -148,6 +154,9 @@ void git_str_clear(git_str *buf)
 int git_str_set(git_str *buf, const void *data, size_t len)
 {
 	size_t alloclen;
+
+	if (!buf)
+		return -1;
 
 	if (len == 0 || data == NULL) {
 		git_str_clear(buf);
@@ -174,6 +183,10 @@ int git_str_sets(git_str *buf, const char *string)
 int git_str_putc(git_str *buf, char c)
 {
 	size_t new_size;
+
+	if (!buf)
+		return -1;
+
 	GIT_ERROR_CHECK_ALLOC_ADD(&new_size, buf->size, 2);
 	ENSURE_SIZE(buf, new_size);
 	buf->ptr[buf->size++] = c;

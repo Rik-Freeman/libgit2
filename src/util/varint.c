@@ -10,11 +10,19 @@
 uintmax_t git_decode_varint(const unsigned char *bufp, size_t *varint_len)
 {
 	const unsigned char *buf = bufp;
-	unsigned char c = *buf++;
-	uintmax_t val = c & 127;
+	unsigned char c;
+	uintmax_t val;
+	size_t count = 0;
+
+	if (!bufp || !varint_len)
+		return 0;
+
+	c = *buf++;
+	val = c & 127;
 	while (c & 128) {
 		val += 1;
-		if (!val || MSB(val, 7)) {
+		count++;
+		if (!val || MSB(val, 7) || count >= sizeof(uintmax_t) * 8 / 7 + 1) {
 			/* This is not a valid varint_len, so it signals
 			   the error */
 			*varint_len = 0;
